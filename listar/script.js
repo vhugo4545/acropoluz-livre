@@ -20,9 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// URL da API de pedidos
-const apiUrl = 'https://visia-2-3e2614848767.herokuapp.com/pedido/';
-
 
 
 // Função para buscar os pedidos da API e preencher a tabela
