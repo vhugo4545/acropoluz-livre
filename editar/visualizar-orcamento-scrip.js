@@ -1377,8 +1377,7 @@ async function gerarEEnviarProposta() {
         alert('Atualizando a proposta. Por favor, aguarde...');
         await atualizarProposta(); // Aguarda a conclusão da atualização
 
-        // Chamar a função de atualização de status e aguardar a conclusão
-        await atualizarStatusParaEfetivado();
+       
         alert('Status atualizado para Efetivado com sucesso!');
     } catch (error) {
         console.error('Erro ao enviar a proposta:', error);
