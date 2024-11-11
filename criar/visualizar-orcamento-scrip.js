@@ -1,6 +1,14 @@
 
 buscarClientes()
 
+document.addEventListener("DOMContentLoaded", function() {
+    if (!document.cookie.includes("sessionCache")) {
+        document.cookie = `sessionCache=${new Date().getTime()}; path=/`;
+        window.location.reload();
+    }
+});
+
+
 
 //PopUps
 function cadastrarNovoCliente() {
