@@ -236,7 +236,7 @@ function adicionarProduto() {
              <td><textarea class="form-control" rows="3" cols="30"></textarea></td>
             <td>
                 <i class="fa fa-times" style="cursor: pointer; color: red;" onclick="removerProduto(this, '${ambienteSelecionado}')" title="Remover Produto"></i>
-                <i class="fa fa-question-circle" style="cursor: pointer; color: blue; margin-right: 10px;" onclick="adicionarObservacao(this)" title="Adicionar Observação"></i>
+              
             </td>
         `;
 
@@ -600,7 +600,7 @@ function preencherProdutosNosAmbientes(produtos) {
                                 <td style="white-space: nowrap;"><input type="text" class="form-control valorTotal" value="${valorTotal.toFixed(2).replace('.', ',')}" onchange="atualizarValorUnitario(this, '${ambiente}')"></td>
                                 <td><textarea class="form-control" rows="3" cols="30">${produto.observacao || ''}</textarea></td>
                                 <td>
-                                    <i class="fa fa-question-circle" style="cursor: pointer; color: blue; margin-right: 10px;" onclick="adicionarObservacao(this)" title="Adicionar Observação"></i>
+                        
                                     <i class="fa fa-times" style="cursor: pointer; color: red;" onclick="removerProduto(this, '${ambiente}')" title="Remover Produto"></i>
                                 </td>
                             </tr>
@@ -720,7 +720,7 @@ function adicionarOuIncluirProdutoGenerico() {
               <td><textarea class="form-control" rows="3" cols="30">${produto.observacao || ''}</textarea></td>
             <td>
                 <i class="fa fa-times" style="cursor: pointer; color: red;" onclick="removerProduto(this, '${ambienteSelecionado}')" title="Remover Produto"></i>
-                <i class="fa fa-question-circle" style="cursor: pointer; color: blue; margin-right: 10px;" onclick="adicionarObservacao(this)" title="Adicionar Observação"></i>
+               
             </td>
         `;
 
