@@ -657,6 +657,7 @@ function criarTabelaAmbiente(ambiente) {
                     <th>Valor Unitário</th>
                     <th>Quantidade</th>
                     <th>Valor Total</th>
+                    <th>Obs</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -1117,6 +1118,7 @@ function validarDesconto() {
 
 
 //Interações com servidor 
+
 // Atualiza pedidos
 async function atualizarProposta() {
     // Obter o ID do pedido da URL
@@ -1162,16 +1164,20 @@ async function atualizarProposta() {
                 const codigoProduto = row.querySelector("td:nth-child(4)")?.innerText.trim() || '';
                 const codigoInterno = row.querySelector("td:nth-child(5)")?.innerText.trim() || '';
                 const valorUnitario = row.querySelector(".valorUnitario")?.innerText.replace(/[R$]/g, '').replace(/\./g, '').replace(',', '.') || 0;
-                console.log(valorUnitario);
-
                 const quantidade = parseFloat(row.querySelector(".quantidadeProduto")?.value || 0);
                 const valorTotal = parseFloat(row.querySelector(".valorTotal")?.innerText.replace(/[^\d,.-]/g, '').replace(',', '.') || 0);
+
                 let observacao = '';
 
-                // Verificar observação
-                const nextRow = row.nextElementSibling;
-                if (nextRow && nextRow.classList.contains('observacao-row')) {
-                    observacao = nextRow.querySelector('textarea')?.value.trim() || '';
+                // Verificar observação em cada linha
+                const observacaoEspecifica = row.querySelector('textarea[placeholder="Adicione sua observação aqui"]')?.value.trim();
+                const observacaoGeral = row.querySelector('textarea[cols="30"]')?.value.trim();
+
+                // Se o campo específico de observação está preenchido, usá-lo
+                if (observacaoEspecifica) {
+                    observacao = observacaoEspecifica;
+                } else if (observacaoGeral) {
+                    observacao = observacaoGeral;
                 }
 
                 if (nomeProduto && !isNaN(valorUnitario) && !isNaN(quantidade) && !isNaN(valorTotal)) {
@@ -1202,7 +1208,7 @@ async function atualizarProposta() {
             informacoesOrcamento: {
                 vendedor,
                 agenteArquiteto,
-                transportadora: tipoEntrega ,
+                transportadora: tipoEntrega,
                 tipoEntrega,
                 valorFrete,
                 tipoPagamento,
@@ -1240,6 +1246,7 @@ async function atualizarProposta() {
         alert('Erro ao se conectar ao servidor. Tente novamente mais tarde.');
     }
 }
+
 
 // Função para gerar e enviar a proposta para a API
 // Função de exemplo para atualização de status
@@ -1339,8 +1346,7 @@ async function gerarEEnviarProposta() {
         },
         informacoes_adicionais: {
             codigo_categoria: "1.05.98",
-
-            codigo_conta_corrente:3498195819 ,
+            codigo_conta_corrente: 3498195819,
             consumidor_final: "S",
             enviar_email: "N"
         },
@@ -1378,7 +1384,8 @@ async function gerarEEnviarProposta() {
         alert('Atualizando a proposta. Por favor, aguarde...');
         await atualizarProposta(); // Aguarda a conclusão da atualização
 
-       
+        // Chamar a função de atualização de status e aguardar a conclusão
+        await atualizarStatusParaEfetivado();
         alert('Status atualizado para Efetivado com sucesso!');
     } catch (error) {
         console.error('Erro ao enviar a proposta:', error);
