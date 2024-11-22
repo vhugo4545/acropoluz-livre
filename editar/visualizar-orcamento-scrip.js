@@ -539,6 +539,7 @@ function incluirProdutosSelecionados() {
     atualizarTodosOsCalculos(ambienteSelecionado);
 }
 // Função para preencher os produtos agrupados por ambiente no formulário e tornar as tabelas ordenáveis
+// Função para preencher os produtos agrupados por ambiente no formulário e tornar as tabelas ordenáveis
 function preencherProdutosNosAmbientes(produtos) {
     const tabelasAmbientesDiv = document.getElementById('tabelasAmbientes');
     tabelasAmbientesDiv.innerHTML = ''; // Limpar qualquer conteúdo anterior
@@ -547,13 +548,12 @@ function preencherProdutosNosAmbientes(produtos) {
 
     // Agrupar produtos por ambiente
     produtos.forEach(produto => {
-        if (!ambientesMap[produto.ambiente]) {
-            ambientesMap[produto.ambiente] = [];
+        const ambienteKey = produto.ambiente.replace(/\W/g, '_'); // Substituir caracteres não alfanuméricos
+        if (!ambientesMap[ambienteKey]) {
+            ambientesMap[ambienteKey] = [];
         }
-        ambientesMap[produto.ambiente].push(produto);
+        ambientesMap[ambienteKey].push(produto);
     });
-
-   
 
     // Criar tabelas para cada ambiente
     Object.keys(ambientesMap).forEach(ambiente => {
@@ -564,7 +564,7 @@ function preencherProdutosNosAmbientes(produtos) {
         let totalAmbiente = 0;
         ambienteDiv.innerHTML = `
             <h4 class="text-center text-uppercase" style="font-weight: bold;">
-                ${ambiente}
+                ${ambiente.replace(/_/g, ' ')}
                 <button class="btn btn-sm btn-danger" onclick="removerAmbiente('${ambiente}')">Excluir Ambiente</button>
             </h4>
             <table class="table table-bordered sortable-table" id="tabela-${ambiente}" data-sort-order="asc">
