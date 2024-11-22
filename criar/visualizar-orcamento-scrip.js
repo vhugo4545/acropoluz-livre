@@ -347,7 +347,7 @@ async function filtrarProdutos() {
 }
 // Função para pesquisar ambientes
 async function pesquisarAmbiente() {
-    const pesquisa = document.getElementById('ambienteSelecionado').value.toLowerCase();
+    const pesquisa = document.getElementById('ambienteSelecionado').value.toLowerCase().trim();
     const ambienteSuggestions = document.getElementById('ambienteSuggestions');
 
     ambienteSuggestions.innerHTML = '';
@@ -366,10 +366,25 @@ async function pesquisarAmbiente() {
         }
 
         const ambientes = await response.json();
-        const ambientesFiltrados = ambientes.filter(ambiente =>
+
+        // Normalizar os nomes dos ambientes (remover espaços e converter para minúsculas)
+        const ambientesNormalizados = ambientes.map(ambiente => ({
+            ...ambiente,
+            nome: ambiente.nome.trim()
+        }));
+
+        // Remover duplicatas
+        const ambientesSemDuplicatas = Array.from(
+            new Map(ambientesNormalizados.map(ambiente => [ambiente.nome.toLowerCase(), ambiente]))
+            .values()
+        );
+
+        // Filtrar os ambientes pela pesquisa
+        const ambientesFiltrados = ambientesSemDuplicatas.filter(ambiente =>
             ambiente.nome.toLowerCase().includes(pesquisa)
         );
 
+        // Adicionar ao autocomplete
         ambientesFiltrados.forEach(ambiente => {
             const div = document.createElement('div');
             div.classList.add('item-autocomplete');
@@ -386,8 +401,11 @@ async function pesquisarAmbiente() {
             div.classList.add('item-autocomplete');
             div.innerHTML = `<strong>Cadastrar novo ambiente: "${pesquisa}"</strong>`;
             div.onclick = async function () {
-                await cadastrarAmbiente(pesquisa);
-                ambienteSuggestions.style.display = 'none';
+                const confirmacao = confirm(`Tem certeza que deseja cadastrar o ambiente: "${pesquisa}"?`);
+                if (confirmacao) {
+                    await cadastrarAmbiente(pesquisa);
+                    ambienteSuggestions.style.display = 'none';
+                }
             };
             ambienteSuggestions.appendChild(div);
         }
@@ -395,7 +413,6 @@ async function pesquisarAmbiente() {
         console.error('Erro ao buscar ambientes:', error);
     }
 }
-
 // Função para cadastrar um novo ambiente
 
 async function cadastrarAmbiente(nomeAmbiente) {
